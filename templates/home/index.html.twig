@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  {% set flash = null %}
+  {% set success = app.flashes('success') %}
+  {% set error = app.flashes('error') %}
+
+  {% if success %}
+    {% set flash = { message: success[0], type: 'success' } %}
+  {% elseif error %}
+    {% set flash = { message: error[0], type: 'error' } %}
+  {% endif %}
+
+  <div {{ react_component('App', { loginAction: '/login', registerAction: '/register', flash: flash }) }}></div>
+{% endblock %}
