@@ -1,9 +1,12 @@
 import { X, Mail, Lock, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { CustomInput } from './CustomInput';
 import { submitForm } from './api';
 
+
 export function RegisterForm({ onClose, darkMode }) {
+  const navigate = useNavigate();
 
   const {
     register,
@@ -11,14 +14,17 @@ export function RegisterForm({ onClose, darkMode }) {
     handleSubmit,
   } = useForm()
 
+
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const result = await submitForm('/register', data);
       console.log(result);
 
-      if (result.redirect) {
-        window.location.href = result.redirect;
+      if (result === 'registration success') {
+        onClose(); // Ferme la modale
+        navigate('/', {
+          state: { flash: { message: "Inscription réussie !", type: "success" } }
+        }); // Redirige sans recharger
       }
       // redirection ou message flash...
     } catch (error) {

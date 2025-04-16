@@ -11,5 +11,5 @@
     {% set flash = { message: error[0], type: 'error' } %}
   {% endif %}
 
-  <div {{ react_component('App', { loginAction: '/login', registerAction: '/register', flash: flash }) }}></div>
+  <div {{ react_component('index', { loginAction: '/login', registerAction: '/register', flash: flash }) }}></div>
 {% endblock %}

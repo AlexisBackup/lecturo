@@ -18,7 +18,7 @@ class UserBook
     #[ORM\ManyToOne(inversedBy: "userBooks")]
     private ?User $owner = null;
 
-    #[ORM\ManyToOne(inversedBy: "status")]
+    #[ORM\ManyToOne(inversedBy: "userBooks")]
     private ?Book $book = null;
 
     #[ORM\Column(type: "string", enumType: ReadStatus::class)]

@@ -13,6 +13,6 @@ export async function submitForm(endpoint, data) {
       throw errorData;
     }
   
-    return await response.json();
+    return response.json();
   }
   
