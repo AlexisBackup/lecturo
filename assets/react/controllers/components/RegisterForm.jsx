@@ -1,7 +1,7 @@
 import { X, Mail, Lock, User } from 'lucide-react';
+import { useForm } from "react-hook-form";
 import { CustomInput } from './CustomInput';
 import { submitForm } from './api';
-import { useForm } from "react-hook-form";
 
 export function RegisterForm({ onClose, darkMode }) {
 
@@ -47,6 +47,7 @@ export function RegisterForm({ onClose, darkMode }) {
               register={register}
               darkMode={darkMode}
               placeholder={"Votre pseudo"}
+              type="text"
               required
             />
           </div>
@@ -68,6 +69,7 @@ export function RegisterForm({ onClose, darkMode }) {
               darkMode={darkMode}
               placeholder={"votre@email.com"}
               errorMessage={errors.email?.message}
+              type="text"
               required />
           </div>
           <div>
@@ -78,8 +80,28 @@ export function RegisterForm({ onClose, darkMode }) {
               icon={Lock}
               name={"password"}
               register={register}
+              rules={{
+                required: "Le mot de passe est requis",
+                minLength: {
+                  value: 8,
+                  message: "Le mot de passe doit contenir au moins 8 caractères",
+                },
+                validate: {
+                  hasUppercase: (v) =>
+                    /[A-Z]/.test(v) || "Au moins une majuscule requise",
+                  hasLowercase: (v) =>
+                    /[a-z]/.test(v) || "Au moins une minuscule requise",
+                  hasNumber: (v) =>
+                    /[0-9]/.test(v) || "Au moins un chiffre requis",
+                  hasSpecialChar: (v) =>
+                    /[!@#$%^&*(),.?\":{}|<>]/.test(v) ||
+                    "Au moins un caractère spécial requis",
+                },
+              }}
               darkMode={darkMode}
               placeholder={"••••••"}
+              errorMessage={errors.password?.message}
+              type="password"
               required />
           </div>
           <button
