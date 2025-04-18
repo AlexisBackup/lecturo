@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-  <div {{ react_component('components/pages/ProfilePage') }}></div>
+  <div {{ react_component('components/pages/ProfilePage', {
+    user: {
+      email: app.user.email,
+      pseudo: app.user.pseudo
+    }
+  }) }}></div>
 {% endblock %}

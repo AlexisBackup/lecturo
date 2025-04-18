@@ -24,7 +24,7 @@ export function RegisterForm({ onClose, darkMode }) {
         onClose(); // Ferme la modale
         navigate('/', {
           state: { flash: { message: "Inscription réussie !", type: "success" } }
-        }); // Redirige sans recharger
+        });
       }
       // redirection ou message flash...
     } catch (error) {

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { BookPlus, ScrollText, Library, Search, Plus } from 'lucide-react';
+import { BookPlus, ScrollText, Library, Search, Plus, Settings, LogOut, User, BookOpen } from 'lucide-react';
+import { NavBar } from '../NavBar';
 
-export default function ProfilePage({ darkMode }) {
+export default function ProfilePage({ darkMode, user }) {
   const [showAddBook, setShowAddBook] = useState(false);
   const [showAddSummary, setShowAddSummary] = useState(false);
+  const [activeTab, setActiveTab] = useState('library'); // 'library' or 'settings'
 
   // Placeholder data for books
   const books = [
@@ -30,8 +32,65 @@ export default function ProfilePage({ darkMode }) {
     }
   ];
 
+  console.log(user);
+
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gradient-to-b from-blue-50 to-white'}`}>
+      {/* Side Navigation */}
+      <NavBar />
+      <div className={`fixed left-0 top-16 h-full w-64 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
+        <div className="p-6">
+          <div className="flex flex-col items-center mb-8">
+            <div className={`h-20 w-20 rounded-full ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} flex items-center justify-center mb-4`}>
+              <User className={`h-10 w-10 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+            </div>
+            <h2 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{user.pseudo}</h2>
+            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{user.email}</p>
+          </div>
+
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab('library')}
+              className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${activeTab === 'library'
+                ? darkMode
+                  ? 'bg-gray-700 text-white'
+                  : 'bg-blue-50 text-blue-600'
+                : darkMode
+                  ? 'text-gray-300 hover:bg-gray-700'
+                  : 'text-gray-600 hover:bg-gray-100'
+                }`}
+            >
+              <BookOpen className="h-5 w-5" />
+              <span>Ma bibliothèque</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${activeTab === 'settings'
+                ? darkMode
+                  ? 'bg-gray-700 text-white'
+                  : 'bg-blue-50 text-blue-600'
+                : darkMode
+                  ? 'text-gray-300 hover:bg-gray-700'
+                  : 'text-gray-600 hover:bg-gray-100'
+                }`}
+            >
+              <Settings className="h-5 w-5" />
+              <span>Paramètres</span>
+            </button>
+
+            <button
+              className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${darkMode
+                ? 'text-red-400 hover:bg-gray-700'
+                : 'text-red-600 hover:bg-gray-100'
+                }`}
+            >
+              <LogOut className="h-5 w-5" />
+              <span>Déconnexion</span>
+            </button>
+          </nav>
+        </div>
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Profile Header */}
         <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6 mb-8`}>
@@ -78,11 +137,10 @@ export default function ProfilePage({ darkMode }) {
             <input
               type="text"
               placeholder="Rechercher un livre..."
-              className={`w-full pl-10 pr-4 py-2 rounded-lg ${
-                darkMode
-                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
-                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-              } border focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+              className={`w-full pl-10 pr-4 py-2 rounded-lg ${darkMode
+                ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                } border focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
             />
           </div>
         </div>

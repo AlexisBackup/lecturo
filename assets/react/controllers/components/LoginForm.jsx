@@ -1,7 +1,33 @@
 import React from 'react';
 import { X, Mail, Lock } from 'lucide-react';
+import { submitForm } from './api';
+import { useForm } from "react-hook-form";
+import { CustomInput } from './CustomInput';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginForm({ onClose, darkMode, action }) {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm()
+
+  const onSubmit = async (data) => {
+    try {
+      const result = await submitForm('/login', data);
+
+      if (result) {
+        window.location.href = '/profile';
+      }
+      // redirection ou message flash...
+    } catch (error) {
+      console.error("Erreur :", error);
+      // afficher les erreurs dans le formulaire...
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg p-8 max-w-md w-full relative`}>
@@ -12,50 +38,70 @@ export function LoginForm({ onClose, darkMode, action }) {
           <X className="h-5 w-5" />
         </button>
         <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Se connecter</h2>
-        <form className="space-y-4" method='POST' action={action}>
+        <form className="space-y-4" method='POST' onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label htmlFor="email" className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-1`}>
-              Email
+
             </label>
-            <div className="relative">
-              <Mail className={`absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-              <input
-                type="email"
-                id="email"
-                className={`pl-10 w-full rounded-lg ${
-                  darkMode
-                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
-                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                } border p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
-                placeholder="votre@email.com"
-                required
-              />
-            </div>
+
+            <Mail className={`absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+            <CustomInput
+              icon={Mail}
+              name={"_username"}
+              register={register}
+              rules={{
+                required: "L'email est requis",
+                pattern: {
+                  value: /^[^@]+@[^@]+\.[^@]+$/,
+                  message: "Email invalide"
+                }
+              }}
+              darkMode={darkMode}
+              placeholder={"votre@email.com"}
+              errorMessage={errors.email?.message}
+              type="text"
+              required />
+
           </div>
           <div>
             <label htmlFor="password" className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-1`}>
               Mot de passe
             </label>
-            <div className="relative">
-              <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-              <input
-                type="password"
-                id="password"
-                className={`pl-10 w-full rounded-lg ${
-                  darkMode
-                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
-                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                } border p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
-                placeholder="••••••••"
-                required
-              />
-            </div>
+
+            <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+
+            <CustomInput
+              icon={Lock}
+              name={"_password"}
+              register={register}
+              rules={{
+                required: "Le mot de passe est requis",
+                minLength: {
+                  value: 8,
+                  message: "Le mot de passe doit contenir au moins 8 caractères",
+                },
+                validate: {
+                  hasUppercase: (v) =>
+                    /[A-Z]/.test(v) || "Au moins une majuscule requise",
+                  hasLowercase: (v) =>
+                    /[a-z]/.test(v) || "Au moins une minuscule requise",
+                  hasNumber: (v) =>
+                    /[0-9]/.test(v) || "Au moins un chiffre requis",
+                  hasSpecialChar: (v) =>
+                    /[!@#$%^&*(),.?\":{}|<>]/.test(v) ||
+                    "Au moins un caractère spécial requis",
+                },
+              }}
+              darkMode={darkMode}
+              placeholder={"••••••"}
+              errorMessage={errors.password?.message}
+              type="password"
+              required />
           </div>
           <button
             type="submit"
-            className={`w-full ${
-              darkMode ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-600 hover:bg-blue-700'
-            } text-white font-medium rounded-lg px-5 py-2.5 text-center transition-colors`}
+            className={`w-full ${darkMode ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-600 hover:bg-blue-700'
+              } text-white font-medium rounded-lg px-5 py-2.5 text-center transition-colors`}
           >
             Se connecter
           </button>

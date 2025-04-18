@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { BookmarkCheck, Star, BookPlus, ScrollText} from 'lucide-react';
-import { LoginForm } from '../LoginForm';
-import { RegisterForm } from '../RegisterForm';
 
 function HomePage({ loginAction, registerAction, flash }) {
 
